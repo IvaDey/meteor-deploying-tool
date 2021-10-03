@@ -1,5 +1,5 @@
 {
-  "name": "meteor-deploying-tool",
+  "name": "meteor-helpers-tool",
   "version": "1.0.0",
   "description": "CLI tools for easy deploying meteor apps",
   "main": "src/index.ts",
@@ -8,11 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "cliva": "dist/index.js"
+    "mlivad": "dist/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IvaDey/meteor-deploying-tool.git"
+    "url": "git+https://github.com/IvaDey/meteor-helpers-tool.git"
   },
   "keywords": [
     "meteor",
@@ -23,9 +23,9 @@
   "author": "Valentin Ivanenko",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IvaDey/meteor-deploying-tool/issues"
+    "url": "https://github.com/IvaDey/meteor-helpers-tool/issues"
   },
-  "homepage": "https://github.com/IvaDey/meteor-deploying-tool#readme",
+  "homepage": "https://github.com/IvaDey/meteor-helpers-tool#readme",
   "devDependencies": {
     "@types/node": "^16.10.2",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
