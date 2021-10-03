@@ -1,0 +1,46 @@
+{
+  "name": "meteor-deploying-tool",
+  "version": "1.0.0",
+  "description": "CLI tools for easy deploying meteor apps",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "cliva": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvaDey/meteor-deploying-tool.git"
+  },
+  "keywords": [
+    "meteor",
+    "deploy",
+    "deploy-cli",
+    "deploy-tool"
+  ],
+  "author": "Valentin Ivanenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IvaDey/meteor-deploying-tool/issues"
+  },
+  "homepage": "https://github.com/IvaDey/meteor-deploying-tool#readme",
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@types/cli-progress": "^3.9.2",
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.9.1",
+    "commander": "^8.2.0",
+    "moment": "^2.29.1",
+    "node-ssh": "^12.0.0"
+  }
+}

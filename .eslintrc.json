@@ -1,0 +1,93 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "allowImportExportEverywhere": true,
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "airbnb",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [],
+  "settings": {
+    "import/resolver": [
+      {
+        "node": {
+          "extensions": [".ts","tsx",".d.ts"]
+        },
+        "typescript": {}
+      }
+    ]
+  },
+  "rules": {
+    "react/display-name": 0,
+    "no-console": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-param-reassign": 0,
+    "react/prop-types": 0,
+    "react/destructuring-assignment": 0,
+    "react/no-array-index-key": "error",
+    "jsx-a11y/anchor-is-valid": 0,
+    "react/jsx-no-bind": 0, // TODO: @av: remove and refactor
+    "react/jsx-props-no-spreading": 0,
+    "indent": [
+      "error",
+      2
+    ],
+    "quotes": [
+      "error",
+      "single",
+      // To allow Template Literals inside Component props.
+      // ex. <Component width={`50%`}/>
+      //
+      { "allowTemplateLiterals": true }
+    ],
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    // To resolve https://github.com/clayne11/eslint-import-resolver-meteor/issues/17
+    "import/extensions": [
+      "off",
+      "never"
+    ],
+    // Work around until  https://github.com/benmosher/eslint-plugin-import/issues/479 is resolved
+    "import/no-extraneous-dependencies": [
+      "off"
+    ],
+    // To allow `_id` access when retrieving Mongo documents
+    "no-underscore-dangle": [
+      "off"
+    ],
+    "import/prefer-default-export": 0,
+    "class-methods-use-this": 0,
+    "jsx-a11y/control-has-associated-label": 0,
+    "react/require-default-props": 0,
+    "react/forbid-prop-types": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "no-empty": [
+      "error",
+      { "allowEmptyCatch": true }
+    ],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreTemplateLiterals": true,
+      "ignoreRegExpLiterals": true,
+      "ignoreUrls": true
+    }],
+    "@typescript-eslint/no-empty-function": "off",
+    "object-curly-spacing": "off",
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
+  }
+}
