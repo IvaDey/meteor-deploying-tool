@@ -33,10 +33,7 @@ const getTimestamp = () => chalk.bold(`[${moment().format('YYYY-MM-DD HH:mm:ss')
 const timeLog = (...args: unknown[]) => console.log(getTimestamp(), ...args);
 
 export default function deploy(deployType?: DeployType): void {
-  if (deployType === DeployType.prerelease) console.log('npm version prerelease');
-  if (deployType === DeployType.patch) console.log('npm version patch');
-  if (deployType === DeployType.minor) console.log('npm version minor');
-  if (deployType === DeployType.major) console.log('npm version major');
+  if (deployType) cp.execSync(`npm version ${deployType}`);
 
   const currentPath = process.env.PWD!;
   const configPath = path.resolve(currentPath, 'deploy.config.js');
