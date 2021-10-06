@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import path from 'path';
 import * as fs from 'fs';
 import cp from 'child_process';
-import moment from 'moment';
 import { NodeSSH } from 'node-ssh';
 import cliProgress from 'cli-progress';
+import { timeLog, execRemote } from './helpers';
 
 export enum DeployType {
   prerelease,
@@ -28,9 +28,6 @@ export interface IDeployConfig {
     [key: string]: string | number | boolean,
   }
 }
-
-const getTimestamp = () => chalk.bold(`[${moment().format('YYYY-MM-DD HH:mm:ss')}]`);
-const timeLog = (...args: unknown[]) => console.log(getTimestamp(), ...args);
 
 export default function deploy(deployType?: DeployType): void {
   if (deployType) cp.execSync(`npm version ${deployType}`);
@@ -95,16 +92,6 @@ export default function deploy(deployType?: DeployType): void {
     privateKey: fs.readFileSync(deployConfig.privateKey).toString(),
   })
     .then(async () => {
-      const execRemote = async (command: string, errMessage?: string) => {
-        const execRes = await sshConnection.execCommand(command);
-        if (execRes.code) {
-          console.log(chalk.red(`Error! ${errMessage || ''}`));
-          console.log(chalk.red(execRes.stderr));
-          process.exit(1);
-        }
-        return execRes;
-      };
-
       timeLog('Upload bundle files to the server...');
       try {
         const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
@@ -134,29 +121,32 @@ export default function deploy(deployType?: DeployType): void {
       timeLog(chalk.green('Upload Successfully!'));
 
       timeLog('Unzip bundle...');
-      await execRemote(`tar -xvf ${bundleName} > /dev/null`, 'Failed to unzip bundle');
+      await execRemote(sshConnection, `tar -xvf ${bundleName} > /dev/null`, 'Failed to unzip bundle');
       timeLog(chalk.green('Unzipping Successfully!'));
 
       timeLog('Install modules...');
       await execRemote(
+        sshConnection,
         'cd bundle/programs/server && npm install > /dev/null && cd ../../',
         'Failed to install modules',
       );
       timeLog(chalk.green('Installation Successfully!'));
 
       timeLog('Rerun app...');
-      await execRemote('mv package.json ./bundle', 'Failed to rerun app');
-      await execRemote('mv pm2.config.js ./bundle', 'Failed to rerun app');
-      await execRemote(`pm2 stop ${deployConfig.appName} && pm2 delete ${deployConfig.appName}`, 'Failed to rerun app');
-      await execRemote(`mv ${deployConfig.appName}-app ___`, 'Failed to rerun app');
-      await execRemote(`mv bundle ${deployConfig.appName}-app`, 'Failed to rerun app');
-      await execRemote(`cd ${deployConfig.appName}-app && pm2 start pm2.config.js && cd ..`, 'Failed to rerun app');
+      await execRemote(sshConnection, 'mv package.json ./bundle', 'Failed to rerun app');
+      await execRemote(sshConnection, 'mv pm2.config.js ./bundle', 'Failed to rerun app');
+      await execRemote(sshConnection, `pm2 stop ${deployConfig.appName} && pm2 delete ${deployConfig.appName}`, 'Failed to rerun app');
+      await execRemote(sshConnection, `mv ${deployConfig.appName}-app ___`, 'Failed to rerun app');
+      await execRemote(sshConnection, `mv bundle ${deployConfig.appName}-app`, 'Failed to rerun app');
+      await execRemote(sshConnection, `cd ${deployConfig.appName}-app && pm2 start pm2.config.js && cd ..`, 'Failed to rerun app');
       timeLog(chalk.green('App rerun Successfully'));
 
       timeLog('Clean junk');
-      await execRemote(`rm ${bundleName} && rm -rf ___`, 'Failed to clean junk');
-      fs.unlinkSync(buildLocation);
+      await execRemote(sshConnection, `rm ${bundleName} && rm -rf ___`, 'Failed to clean junk');
+      fs.rmdirSync(buildLocation, { recursive: true });
       timeLog(chalk.green('Clean junk Successfully'));
+
+      // todo: add info about deploying duration
 
       sshConnection.dispose();
       process.exit(0);
